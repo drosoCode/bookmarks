@@ -1,0 +1,432 @@
+openapi: 3.0.1
+info:
+  title: Bookmarks API
+  description: This is the API documentation for the bookmarks project
+  version: 1.0.0
+tags:
+- name: Bookmark
+  description: Bookmarks
+- name: Tag
+  description: Tags
+- name: User
+  description: Users
+- name: Token
+  description: Tokens
+servers:
+- url: /api/
+  
+paths:
+  /bookmark:
+    get:
+      tags:
+      - Bookmark
+      summary: List all bookmarks for the current user
+      operationId: list_bookmarks
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/bookmark'
+      security:
+      - user: []
+
+    post:
+      tags:
+      - Bookmark
+      summary: Add a new bookmark
+      operationId: add_bookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                link:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: integer
+                save:
+                  type: boolean
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+      security:
+      - user: []
+      
+  /bookmark/{id}:
+    get:
+      tags:
+      - Bookmark
+      summary: Get a bookmark details
+      operationId: get_bookmark
+      parameters:
+        - name: id
+          in: path
+          description: bookmark id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      $ref: '#/components/schemas/bookmark'
+      security:
+      - user: []
+      
+    delete:
+      tags:
+      - Bookmark
+      summary: Delete a bookmark
+      operationId: delete_bookmark
+      parameters:
+        - name: id
+          in: path
+          description: bookmark id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+      security:
+      - user: []
+  
+  
+  /tag:
+    get:
+      tags:
+      - Tag
+      summary: List all tags for the current user
+      operationId: list_tags
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/tag'
+      security:
+      - user: []
+      
+    post:
+      tags:
+      - Tag
+      summary: Add a new tag
+      operationId: add_tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                color:
+                  type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+      security:
+      - user: []
+      
+  /tag/{id}:
+    delete:
+      tags:
+      - Tag
+      summary: Delete a tag
+      operationId: delete_tag
+      parameters:
+        - name: id
+          in: path
+          description: tag id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+      security:
+      - user: []
+
+
+
+  /user/login:
+    get:
+      tags:
+      - User
+      summary: Login using trusted headers
+      operationId: user_login
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: object
+                      properties:
+                        token:
+                          type: string
+
+  /user/logout:
+    get:
+      tags:
+      - User
+      summary: Logout
+      operationId: user_logout
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: string
+      security:
+      - user: []
+
+  /token:
+    get:
+      tags:
+      - Token
+      summary: List all tokens for the current user
+      operationId: list_tokens
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/token'
+      security:
+      - user: []
+      
+    post:
+      tags:
+      - Token
+      summary: Add a new token
+      operationId: add_token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        token:
+                          type: string
+      security:
+      - user: []
+      
+  /token/{id}:
+    delete:
+      tags:
+      - Token
+      summary: Delete a token
+      operationId: delete_token
+      parameters:
+        - name: id
+          in: path
+          description: token id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      default: ok
+      security:
+      - user: []
+
+components:
+  schemas:
+    bookmark:
+      type: object
+      properties:
+        id:
+          type: integer
+        link:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        save:
+          type: boolean
+        html:
+          type: string
+        add_date:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: integer
+  
+    tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+  
+    token:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        add_date:
+          type: string
+        value:
+          type: string
+
+  securitySchemes:
+    user:
+      type: http
+      scheme: bearer
