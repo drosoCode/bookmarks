@@ -1,6 +1,6 @@
 module github.com/drosocode/bookmarks
 
-go 1.19
+go 1.18
 
 require (
 	github.com/ajg/form v1.5.1 // indirect

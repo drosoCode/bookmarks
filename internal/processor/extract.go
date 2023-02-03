@@ -1,8 +1,12 @@
 package processor
 
 import (
-	"github.com/playwright-community/playwright-go"
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/playwright-community/playwright-go"
 )
 
 func screen(page playwright.Page, path string) error {
@@ -14,56 +18,45 @@ func screen(page playwright.Page, path string) error {
 	return nil
 }
 
-func download(page playwright.Page) error {
-	page.On("response", func(response playwright.Response) {
-		//fmt.Printf("<< %v %s\n", response.Status(), response.URL())
-	})
-	return nil
-}
-
-func getValue(page playwright.Page, selector string) string {
-	fmt.Println(selector)
-	titleElement, err := page.QuerySelectorAll(selector)
-	fmt.Println(titleElement)
-	if err == nil && len(titleElement) > 0 {
-		title, err := titleElement[0].TextContent()
-		if err != nil {
-			return title
-		}
+func getValue(page playwright.Page, selector string, prop string) string {
+	js := "document.querySelector(\"" + strings.ReplaceAll(selector, "\"", "\\\"") + "\")." + prop
+	val, err := page.Evaluate(js, playwright.FrameEvaluateOptions{})
+	if err == nil {
+		return val.(string)
 	}
 	return ""
 }
 
 func getTitle(page playwright.Page) string {
-	val := getValue(page, "meta[name=\"twitter:title\"]")
+	val := getValue(page, "meta[name=\"twitter:title\"]", "content")
 	if val != "" {
 		return val
 	}
-	val = getValue(page, "meta[name=\"og:title\"]")
+	val = getValue(page, "meta[name=\"og:title\"]", "content")
 	if val != "" {
 		return val
 	}
-	return getValue(page,"title")
+	return getValue(page, "title", "textContent")
 }
 
 func getDescription(page playwright.Page) string {
-	val := getValue(page, "meta[name=\"twitter:description\"]")
+	val := getValue(page, "meta[name=\"twitter:description\"]", "content")
 	if val != "" {
 		return val
 	}
-	val = getValue(page, "meta[name=\"og:description\"]")
+	val = getValue(page, "meta[name=\"og:description\"]", "content")
 	if val != "" {
 		return val
 	}
-	return getValue(page,"meta[name=description]")
+	return getValue(page, "meta[name=description]", "content")
 }
 
 func getImageUrl(page playwright.Page) string {
-	val := getValue(page, "meta[name=\"twitter:image:src\"]")
+	val := getValue(page, "meta[name=\"twitter:image:src\"]", "content")
 	if val != "" {
 		return val
 	}
-	return getValue(page, "meta[name=\"og:image\"]")
+	return getValue(page, "meta[name=\"og:image\"]", "content")
 }
 
 func getImage(page playwright.Page, path string) error {
@@ -83,15 +76,13 @@ func Test(link string) error {
 	if err != nil {
 		return err
 	}
+	savedFiles = []string{}
+	savedEditablePaths = []string{}
+	requestedUrl = link
+	saveDir = "cache/1/html"
+	os.MkdirAll(saveDir, os.ModePerm)
 
-	//download(page)
-	_, err = page.WaitForSelector("title", playwright.PageWaitForSelectorOptions{
-		State: playwright.WaitForSelectorStateAttached,
-	})
-	if err != nil {
-		return err
-	}
-
+	page.On("response", saveFile)
 	if _, err := page.Goto(link, playwright.PageGotoOptions{
 		WaitUntil: playwright.WaitUntilStateNetworkidle,
 	}); err != nil {
@@ -99,11 +90,12 @@ func Test(link string) error {
 	}
 
 	fmt.Println(getTitle(page))
-	//fmt.Println(getDescription(page))
-	//getImage(page, "cache/test.png")
-	
+	fmt.Println(getDescription(page))
+	getImage(page, "cache/test.png")
+	time.Sleep(2 * time.Second)
+	patchFiles()
+
 	page.Close()
 	close()
 	return nil
 }
-

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
+	"os"
 
 	"github.com/drosocode/bookmarks/internal/auth"
 	"github.com/drosocode/bookmarks/internal/config"
 	"github.com/drosocode/bookmarks/internal/database"
-	"github.com/drosocode/bookmarks/internal/processor"
 	handler "github.com/drosocode/bookmarks/internal/handlers"
+	"github.com/drosocode/bookmarks/internal/processor"
 	_ "github.com/lib/pq"
 
 	"github.com/go-chi/chi/v5"
@@ -57,6 +58,8 @@ func main() {
 
 	staticDir, _ := fs.Sub(staticFS, "static")
 	handler.ServeStatic(r, "/", http.FS(staticDir))
+
+	handler.ServeStatic(r, "/cache", http.FS(os.DirFS("cache")))
 
 	fmt.Println("Ready !")
 	processor.Test("https://github.com/playwright-community/playwright-go/blob/main/examples/parallel-scraping/main.go")
