@@ -50,7 +50,7 @@ func CheckPathMiddleware() func(next http.Handler) http.Handler {
 				userInfo := r.Context().Value(config.CtxUserKey).(UserInfo)
 				_, err = database.DB.GetBookmark(context.Background(), database.GetBookmarkParams{IDUser: userInfo.ID, ID: id})
 				if err != nil {
-					utils.Error(w, r, 401, "unauthorized")
+					utils.Error(w, r, 403, "unauthorized")
 					return
 				}
 			}
