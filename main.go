@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"log"
 	"net/http"
 	"os"
 
@@ -27,10 +28,16 @@ var embedFS embed.FS
 
 func main() {
 	config.ParseConfig()
-	database.ConfigDB(config.Data.DB)
+	err := database.ConfigDB(config.Data.DB)
+	if err != nil {
+		log.Fatal(err)
+	}
 	config.Tokens = map[string]int64{}
 	config.CtxUserKey = config.CtxKey("userinfo")
-	auth.LoadTokens()
+	err = auth.LoadTokens()
+	if err != nil {
+		log.Fatal(err)
+	}
 	go processor.StartProcessor()
 
 	r := chi.NewRouter()
@@ -68,6 +75,6 @@ func main() {
 
 	fmt.Println("Ready !")
 
-	err := http.ListenAndServe(config.Data.Serve, r)
+	err = http.ListenAndServe(config.Data.Serve, r)
 	fmt.Println(err)
 }
