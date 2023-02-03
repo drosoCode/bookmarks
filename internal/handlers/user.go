@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/drosocode/bookmarks/internal/auth"
+	"github.com/drosocode/bookmarks/internal/config"
+	"github.com/drosocode/bookmarks/internal/database"
 	"github.com/drosocode/bookmarks/internal/utils"
 	"github.com/go-chi/chi/v5"
 )
@@ -18,6 +21,7 @@ func SetupUsers(r *chi.Mux) {
 
 type UserLogin struct {
 	Token string `json:"token"`
+	Name  string `json:"name"`
 }
 
 // GET user/login
@@ -25,12 +29,17 @@ func LoginUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		uid, err := auth.Authenticate(r)
-		if utils.IfError(w, r, err) {
+		if err != nil {
+			utils.Error(w, r, 401, err.Error())
 			return
 		}
 		token := auth.Login(uid)
+		data, err := database.DB.GetUser(context.Background(), r.Header.Get(config.Data.RemoteUserHeader))
+		if utils.IfError(w, r, err) {
+			return
+		}
 
-		utils.JSON(w, r, 200, UserLogin{Token: token})
+		utils.JSON(w, r, 200, UserLogin{Token: token, Name: data.Name})
 	}
 }
 
