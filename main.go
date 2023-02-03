@@ -60,7 +60,11 @@ func main() {
 	staticDir, _ := fs.Sub(staticFS, "static")
 	handlers.ServeStatic(r, "/", http.FS(staticDir))
 
-	handlers.ServeStatic(r, "/cache", http.FS(os.DirFS("cache")))
+	cr := chi.NewRouter()
+	cr.Use(auth.CheckUserMiddleware())
+	cr.Use(auth.CheckPathMiddleware())
+	r.Mount("/cache", cr)
+	handlers.ServeStatic(cr, "/", http.FS(os.DirFS("cache")))
 
 	fmt.Println("Ready !")
 
