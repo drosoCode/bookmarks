@@ -14,7 +14,8 @@ import (
 )
 
 type AddTagData struct {
-	Name string `json:"name"`
+	Name  string `json:"name"`
+	Color string `json:"color"`
 }
 
 // handle bookmarks
@@ -52,7 +53,7 @@ func AddTag() http.HandlerFunc {
 			return
 		}
 
-		id, err := database.DB.AddTag(context.Background(), database.AddTagParams{Name: settings.Name, IDUser: userInfo.ID})
+		id, err := database.DB.AddTag(context.Background(), database.AddTagParams{Name: settings.Name, Color: settings.Color, IDUser: userInfo.ID})
 		if utils.IfError(w, r, err) {
 			return
 		}
