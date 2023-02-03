@@ -2,12 +2,12 @@ package processor
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/playwright-community/playwright-go"
 )
@@ -32,23 +32,31 @@ func downloadFile(url string, filepath string) error {
 	return err
 }
 
-var savedFiles []string
-var savedEditablePaths []string
-var requestedUrl string
-var saveDir string
+type SharedData struct {
+	SavedFiles         []string
+	SavedEditablePaths []string
+	SavedDocument      bool
+	SaveDir            string
+	WG                 sync.WaitGroup
+}
+
+var sData SharedData
 
 func saveFile(response playwright.Response) {
 	url := response.URL()
 	pos := strings.LastIndex(url, "/")
 	file := url[pos+1:]
 	res := response.Request().ResourceType()
-	if res == "document" {
+	if res == "document" && !sData.SavedDocument {
 		file = "index.html"
+		sData.SavedDocument = true
 	}
-	path := path.Join(saveDir, file)
+	path := path.Join(sData.SaveDir, file)
 
 	if (res == "image" || res == "script" || res == "stylesheet" || res == "document") && response.Status() == 200 {
+		sData.WG.Add(1)
 		go func() {
+			defer sData.WG.Done()
 			data, err := response.Body()
 			if err != nil {
 				return
@@ -58,18 +66,18 @@ func saveFile(response playwright.Response) {
 				return
 			}
 
-			savedFiles = append(savedFiles, file)
+			sData.SavedFiles = append(sData.SavedFiles, file)
 			if res == "script" || res == "document" {
-				savedEditablePaths = append(savedEditablePaths, path)
+				sData.SavedEditablePaths = append(sData.SavedEditablePaths, path)
 			}
 		}()
 	}
 }
 
 func patchFiles() {
-	for _, file := range savedFiles {
-		for _, x := range savedEditablePaths {
-			f, err := ioutil.ReadFile(x)
+	for _, file := range sData.SavedFiles {
+		for _, x := range sData.SavedEditablePaths {
+			f, err := os.ReadFile(x)
 			if err == nil {
 				fstr := string(f[:])
 				r := `[-a-zA-Z0-9@:%._\+\/~#=]*\/` + regexp.QuoteMeta(file)

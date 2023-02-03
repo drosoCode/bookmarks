@@ -1,10 +1,7 @@
 package processor
 
 import (
-	"fmt"
-	"os"
 	"strings"
-	"time"
 
 	"github.com/playwright-community/playwright-go"
 )
@@ -65,37 +62,4 @@ func getImage(page playwright.Page, path string) error {
 	} else {
 		return screen(page, path)
 	}
-}
-
-func Test(link string) error {
-	b, err := getBrowser()
-	if err != nil {
-		return err
-	}
-	page, err := (*b).NewPage()
-	if err != nil {
-		return err
-	}
-	savedFiles = []string{}
-	savedEditablePaths = []string{}
-	requestedUrl = link
-	saveDir = "cache/1/html"
-	os.MkdirAll(saveDir, os.ModePerm)
-
-	page.On("response", saveFile)
-	if _, err := page.Goto(link, playwright.PageGotoOptions{
-		WaitUntil: playwright.WaitUntilStateNetworkidle,
-	}); err != nil {
-		return err
-	}
-
-	fmt.Println(getTitle(page))
-	fmt.Println(getDescription(page))
-	getImage(page, "cache/test.png")
-	time.Sleep(2 * time.Second)
-	patchFiles()
-
-	page.Close()
-	close()
-	return nil
 }

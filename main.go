@@ -10,7 +10,7 @@ import (
 	"github.com/drosocode/bookmarks/internal/auth"
 	"github.com/drosocode/bookmarks/internal/config"
 	"github.com/drosocode/bookmarks/internal/database"
-	handler "github.com/drosocode/bookmarks/internal/handlers"
+	"github.com/drosocode/bookmarks/internal/handlers"
 	"github.com/drosocode/bookmarks/internal/processor"
 	_ "github.com/lib/pq"
 
@@ -31,6 +31,7 @@ func main() {
 	config.Tokens = map[string]int64{}
 	config.CtxUserKey = config.CtxKey("userinfo")
 	auth.LoadTokens()
+	go processor.StartProcessor()
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -46,23 +47,22 @@ func main() {
 	api := chi.NewRouter()
 
 	r.Mount("/api", api)
-	handler.SetupUsers(api)
-	handler.SetupBookmarks(api)
-	handler.SetupTags(api)
-	handler.SetupTokens(api)
+	handlers.SetupUsers(api)
+	handlers.SetupBookmarks(api)
+	handlers.SetupTags(api)
+	handlers.SetupTokens(api)
 
 	staticFS := fs.FS(embedFS)
 
 	apiDir, _ := fs.Sub(staticFS, "api")
-	handler.ServeStatic(r, "/swagger", http.FS(apiDir))
+	handlers.ServeStatic(r, "/swagger", http.FS(apiDir))
 
 	staticDir, _ := fs.Sub(staticFS, "static")
-	handler.ServeStatic(r, "/", http.FS(staticDir))
+	handlers.ServeStatic(r, "/", http.FS(staticDir))
 
-	handler.ServeStatic(r, "/cache", http.FS(os.DirFS("cache")))
+	handlers.ServeStatic(r, "/cache", http.FS(os.DirFS("cache")))
 
 	fmt.Println("Ready !")
-	processor.Test("https://github.com/playwright-community/playwright-go/blob/main/examples/parallel-scraping/main.go")
 
 	err := http.ListenAndServe(config.Data.Serve, r)
 	fmt.Println(err)

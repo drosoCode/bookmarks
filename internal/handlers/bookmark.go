@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"os"
+	"path"
 	"strconv"
 	"time"
-	"path"
-	"os"
 
 	"github.com/drosocode/bookmarks/internal/auth"
 	"github.com/drosocode/bookmarks/internal/config"
@@ -107,7 +107,7 @@ func DeleteBookmark() http.HandlerFunc {
 		if utils.IfError(w, r, err) {
 			return
 		}
-		os.RemoveAll(path.Join(config.Data.CachePath, string(id)))
+		os.RemoveAll(path.Join(config.Data.CachePath, strconv.FormatInt(id, 10)))
 
 		utils.JSON(w, r, 200, "")
 	}

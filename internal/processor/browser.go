@@ -32,5 +32,7 @@ func close() error {
 	if err := (*instance).Stop(); err != nil {
 		return err
 	}
+	browser = nil
+	instance = nil
 	return nil
 }
