@@ -24,7 +24,6 @@ import (
 //go:embed api static
 var embedFS embed.FS
 
-// go run github.com/playwright-community/playwright-go/cmd/playwright install --with-deps
 // go run .\main.go --db-host="10.10.2.1" --db-user="bookmarks" --db-password="secret" --db-name="bookmarks" --registration=true --serve="127.0.0.1:9000"
 
 func main() {
