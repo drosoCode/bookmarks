@@ -1,0 +1,117 @@
+project_name: bookmarks
+
+env:
+    - GO111MODULE=on
+
+before:
+    hooks:
+        - go generate ./...
+
+build:
+    env:
+        - CGO_ENABLED=0
+    main: main.go
+    binary: bookmarks
+    goos:
+        - linux
+    goarch:
+        - amd64
+        - arm
+        - arm64
+    goarm:
+        - 6
+        - 7
+
+archives:
+    - name_template: "{{.Os}}-{{.Arch}}{{if .Arm}}v{{.Arm}}{{end}}-{{ .ProjectName }}"
+      format: tar.gz
+      format_overrides:
+          - goos: windows
+            format: zip
+
+dockers:
+    - dockerfile: Dockerfile
+      use: buildx
+      build_flag_templates:
+          - "--pull"
+          - "--label=org.opencontainers.image.created={{.Date}}"
+          - "--label=org.opencontainers.image.name={{.ProjectName}}"
+          - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+          - "--label=org.opencontainers.image.version={{.Version}}"
+          - "--label=org.opencontainers.image.source={{.GitURL}}"
+          - "--platform=linux/amd64"
+      goos: linux
+      goarch: amd64
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-amd64"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-amd64"
+
+    - dockerfile: Dockerfile
+      use: buildx
+      build_flag_templates:
+          - "--pull"
+          - "--label=org.opencontainers.image.created={{.Date}}"
+          - "--label=org.opencontainers.image.name={{.ProjectName}}"
+          - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+          - "--label=org.opencontainers.image.version={{.Version}}"
+          - "--label=org.opencontainers.image.source={{.GitURL}}"
+          - "--platform=linux/arm64"
+      goos: linux
+      goarch: arm64
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-arm64"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-arm64"
+
+    - dockerfile: Dockerfile
+      use: buildx
+      build_flag_templates:
+          - "--pull"
+          - "--label=org.opencontainers.image.created={{.Date}}"
+          - "--label=org.opencontainers.image.name={{.ProjectName}}"
+          - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+          - "--label=org.opencontainers.image.version={{.Version}}"
+          - "--label=org.opencontainers.image.source={{.GitURL}}"
+          - "--platform=linux/arm/v6"
+      goos: linux
+      goarch: arm
+      goarm: "6"
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv6"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-armv6"
+
+    - dockerfile: Dockerfile
+      use: buildx
+      build_flag_templates:
+          - "--pull"
+          - "--label=org.opencontainers.image.created={{.Date}}"
+          - "--label=org.opencontainers.image.name={{.ProjectName}}"
+          - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+          - "--label=org.opencontainers.image.version={{.Version}}"
+          - "--label=org.opencontainers.image.source={{.GitURL}}"
+          - "--platform=linux/arm/v7"
+      goos: linux
+      goarch: arm
+      goarm: "7"
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv7"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-armv7"
+
+docker_manifests:
+    - name_template: "ghcr.io/drosocode/bookmarks:latest"
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-amd64"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-arm64"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv6"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv7"
+    - name_template: "ghcr.io/drosocode/bookmarks:{{ .Tag }}"
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-amd64"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-arm64"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv6"
+          - "ghcr.io/drosocode/bookmarks:{{ .Tag }}-armv7"
+    - name_template: "ghcr.io/drosocode/bookmarks:v{{ .Major }}"
+      image_templates:
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-amd64"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-arm64"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-armv6"
+          - "ghcr.io/drosocode/bookmarks:v{{ .Major }}-armv7"
