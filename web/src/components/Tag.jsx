@@ -9,7 +9,7 @@ export default function Tag(props) {
     };
 
     return (
-        <h6>
+        <h6 style={{ margin: "2px 6px", display: "inline-block" }}>
             <button
                 disabled
                 className="badge"

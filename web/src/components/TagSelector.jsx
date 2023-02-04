@@ -1,30 +1,59 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
-import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useAPI } from "../Api";
 import Tag from "./Tag";
 
 export default function TagSelector(props) {
     const [show, setShow] = useState(false);
+    const [data, setData] = useState([]);
+    const [selected, setSelected] = useState([]);
+    const [visibleList, setVisibleList] = useState([]);
+    const search = useRef("");
+    const { api } = useAPI();
 
-    const update = () => {
-        console.log("change");
-        setShow(false);
+    useEffect(() => {
+        api("tag", "GET").then((data) => {
+            if (data !== null) {
+                setData(data);
+                setVisibleList(data);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        setSelected([]);
+    }, [props.clear]);
+
+    const filter = () => {
+        const arr = [];
+        data.forEach((e) => {
+            if (
+                search.current.value == "" ||
+                e.name.indexOf(search.current.value) >= 0
+            )
+                arr.push(e);
+        });
+        setVisibleList([...arr]);
+    };
+
+    const select = (id) => {
+        if (selected.includes(id)) selected.splice(selected.indexOf(id), 1);
+        else selected.push(id);
+        setSelected([...selected]);
     };
 
     return (
         <div>
             <InputGroup className="mb-3">
-                <div
-                    className="form-control"
-                    style={{
-                        backgroundColor: "#212529",
-                        borderColor: "#313539",
-                    }}
-                >
-                    <Tag name="tst" color="#ff0000" />
+                <div className="form-control bg-dark text-white">
+                    {data
+                        .filter((t) => selected.includes(t.id))
+                        .map((x) => (
+                            <Tag name={x.name} color={x.color} key={x.id} />
+                        ))}
                 </div>
                 <Button
                     variant="success"
@@ -33,6 +62,15 @@ export default function TagSelector(props) {
                     }}
                 >
                     Add Tag
+                </Button>
+                <Button
+                    variant="danger"
+                    onClick={() => {
+                        props.onChange([]);
+                        setSelected([]);
+                    }}
+                >
+                    Clear
                 </Button>
             </InputGroup>
 
@@ -48,31 +86,36 @@ export default function TagSelector(props) {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <input type="text" className="form-control" />
+                    <input
+                        type="text"
+                        className="form-control"
+                        onChange={filter}
+                        ref={search}
+                    />
                     <br />
                     <ListGroup variant="dark">
-                        <ListGroup.Item>
-                            <Tag name="test" color="#00ff00" />
-                        </ListGroup.Item>
-                        <ListGroup.Item active={true}>
-                            <Tag name="test" color="#00ff00" />
-                        </ListGroup.Item>
-                        <ListGroup.Item active={true}>
-                            <Tag name="test" color="#00ff00" />
-                        </ListGroup.Item>
+                        {visibleList.map((x) => (
+                            <ListGroup.Item
+                                active={selected.includes(x.id)}
+                                onClick={() => {
+                                    select(x.id);
+                                }}
+                                key={x.id}
+                            >
+                                <Tag name={x.name} color={x.color} />
+                            </ListGroup.Item>
+                        ))}
                     </ListGroup>
                 </Modal.Body>
 
                 <Modal.Footer>
                     <Button
-                        variant="danger"
+                        variant="success"
                         onClick={() => {
+                            props.onChange(selected);
                             setShow(false);
                         }}
                     >
-                        Cancel
-                    </Button>
-                    <Button variant="success" onClick={update}>
                         OK
                     </Button>
                 </Modal.Footer>

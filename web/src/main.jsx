@@ -10,6 +10,7 @@ import TokenPage from "./pages/TokenPage";
 import LoginPage from "./pages/LoginPage";
 import RequireAuth from "./components/RequireAuth";
 import { UserProvider } from "./components/UserContext";
+import AddPage from "./pages/AddPage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
@@ -38,6 +39,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                             element={
                                 <RequireAuth>
                                     <TokenPage />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path="add"
+                            element={
+                                <RequireAuth>
+                                    <AddPage />
                                 </RequireAuth>
                             }
                         />

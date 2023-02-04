@@ -25,8 +25,8 @@ export default function TagPage(props) {
     }, []);
 
     const deleteTag = (id) => {
-        api("tag/" + id, "DELETE").then((data) => {
-            update();
+        api("tag/" + id, "DELETE").then((d) => {
+            setData(data.filter((x) => x.id != id));
         });
     };
 
@@ -42,9 +42,13 @@ export default function TagPage(props) {
     return (
         <div>
             <InputGroup className="mb-3">
-                <Form.Control placeholder="Tag Name" ref={tagName} />
+                <Form.Control
+                    placeholder="Tag Name"
+                    ref={tagName}
+                    className="bg-dark text-white"
+                />
                 <input
-                    className="form-control-color"
+                    className="form-control-color bg-dark text-white"
                     type="color"
                     ref={tagColor}
                 />

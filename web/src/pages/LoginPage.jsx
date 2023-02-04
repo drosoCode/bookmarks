@@ -21,6 +21,7 @@ export default function LoginPage(props) {
         };
         setUserStatus(data);
         localStorage.setItem("bookmarks", JSON.stringify(data));
+        document.cookie = "bookmarktoken=" + token.current.value;
         navigate("/home");
     };
 
@@ -32,27 +33,28 @@ export default function LoginPage(props) {
             if (data !== "" && data !== undefined && data !== null) {
                 // login using stored data in localStorage
                 const user = JSON.parse(data);
-                if (user !== null) {
+                if (user !== null && user.connected) {
                     setUserStatus(user);
                     navigate("/home");
+                    return;
                 }
-            } else {
-                // login using api
-                api("user/login", "GET").then((d) => {
-                    if (d != null) {
-                        const data = {
-                            connected: true,
-                            name: d.name,
-                            token: d.token,
-                        };
-                        setUserStatus(data);
-                        localStorage.setItem("bookmarks", JSON.stringify(data));
-                        navigate("/home");
-                    }
-                });
             }
+            // else login using api
+            api("user/login", "GET").then((d) => {
+                if (d != null) {
+                    const data = {
+                        connected: true,
+                        name: d.name,
+                        token: d.token,
+                    };
+                    setUserStatus(data);
+                    localStorage.setItem("bookmarks", JSON.stringify(data));
+                    document.cookie = "bookmarktoken=" + d.token;
+                    navigate("/home");
+                }
+            });
         }
-    });
+    }, []);
 
     return (
         <div>

@@ -4,10 +4,11 @@ import { UserContext } from './components/UserContext';
 export const useAPI = () => {
     const { userStatus, setUserStatus } = useContext(UserContext);
 
-    const api = (path, method = "GET", body = {}) => {
-        const dev = true;
+    const dev = true;
+    const basePath = dev ? "http://127.0.0.1:9000/" : "/"
 
-        const base_path = dev ? "http://127.0.0.1:9000/api/" : "/api/"
+    const api = (path, method = "GET", body = {}) => {
+        const base_path = basePath + "api/"
 
         return new Promise((resolve) => {
             const h = { "Content-Type": "application/json" }
@@ -58,5 +59,5 @@ export const useAPI = () => {
         setUserStatus(userStatus)
     }
 
-    return { api };
+    return { api, basePath };
 }

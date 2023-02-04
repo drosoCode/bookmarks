@@ -22,12 +22,8 @@ export default function TokenPage(props) {
     }, [token]);
 
     const deleteToken = (id) => {
-        api("token/" + id, "DELETE").then((data) => {
-            api("token", "GET").then((data) => {
-                if (data !== null) {
-                    setData(data);
-                }
-            });
+        api("token/" + id, "DELETE").then((d) => {
+            setData(data.filter((x) => x.id != id));
         });
     };
 
@@ -55,7 +51,11 @@ export default function TokenPage(props) {
                 ""
             )}
             <InputGroup className="mb-3">
-                <Form.Control placeholder="Token Name" ref={tokenName} />
+                <Form.Control
+                    placeholder="Token Name"
+                    ref={tokenName}
+                    className="bg-dark text-white"
+                />
                 <Button variant="success" onClick={addToken}>
                     Add Token
                 </Button>
