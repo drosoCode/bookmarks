@@ -14,6 +14,7 @@ import (
 	"github.com/drosocode/bookmarks/internal/handlers"
 	"github.com/drosocode/bookmarks/internal/processor"
 	_ "github.com/lib/pq"
+	"github.com/playwright-community/playwright-go"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -29,6 +30,10 @@ var embedFS embed.FS
 func main() {
 	config.ParseConfig()
 	err := database.ConfigDB(config.Data.DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = playwright.Install()
 	if err != nil {
 		log.Fatal(err)
 	}
