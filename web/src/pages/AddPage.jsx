@@ -1,7 +1,7 @@
 import TagSelector from "../components/TagSelector";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAPI } from "../Api";
 
 export default function AddPage(props) {
@@ -24,6 +24,13 @@ export default function AddPage(props) {
             }
         });
     };
+
+    useEffect(() => {
+        const parsedUrl = new URL(window.location);
+        alert("Title shared: " + parsedUrl.searchParams.get("title"));
+        alert("Text shared: " + parsedUrl.searchParams.get("text"));
+        alert("URL shared: " + parsedUrl.searchParams.get("url"));
+    });
 
     return (
         <div style={{ textAlign: "left" }} className="card bg-dark">

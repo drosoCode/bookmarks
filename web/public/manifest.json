@@ -1,0 +1,36 @@
+{
+    "name": "Bookmarks",
+    "short_name": "Bookmarks",
+    "description": "Self-hosted Bookmarks Manager",
+    "display": "fullscreen",
+    "background_color": "#242424",
+    "theme_color": "#242424",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "icon128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "icon.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "share_target": {
+        "action": "#/add",
+        "method": "GET",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
+}
