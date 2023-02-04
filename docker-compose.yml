@@ -1,0 +1,27 @@
+version: '3'
+services:
+    bookmarks:
+        image: ghcr.io/drosocode/bookmarks
+        restart: unless-stopped
+        environment:
+            BM_USER_HEADER: Remote-User
+            BM_GROUP_HEADER: Remote-Group
+            BM_NAME_HEADER: Remote-Name
+            BM_ALLOWED_GROUPS: bookmarks
+            BM_TRUSTED_SOURCES: 0.0.0.0/0
+            BM_REGISTRATION: "true"
+            BM_CACHE: /cache
+            BM_DB_HOST: postgresql
+            BM_DB_USER: user
+            BM_DB_PASSWORD: password
+            BM_DB_PORT: 5432
+            BM_DB_NAME: bookmarks
+        volumes:
+            - ./cache:/cache
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.bookmarks.rule=Host(`bookmarks.domain.tld`)
+            - traefik.http.routers.bookmarks.entrypoints=https
+            - traefik.http.routers.bookmarks.tls.certresolver=ovh
+            - traefik.http.services.bookmarks_service.loadbalancer.server.port=9000
+            - traefik.http.routers.bookmarks.service=bookmarks_service
