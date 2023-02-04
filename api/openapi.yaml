@@ -397,8 +397,6 @@ components:
           type: string
         save:
           type: boolean
-        html:
-          type: string
         add_date:
           type: integer
         tags:
