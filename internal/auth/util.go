@@ -35,6 +35,12 @@ func GetToken(r *http.Request) (string, error) {
 		return token[7:], nil
 	}
 
+	// check in the cookies
+	tok, err := r.Cookie("bookmarktoken")
+	if err == nil && tok.Value != "" {
+		return tok.Value, nil
+	}
+
 	return "", errors.New("token not found")
 }
 
