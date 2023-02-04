@@ -25,7 +25,7 @@ export default function BNavbar() {
                 <Container>
                     <Navbar.Brand href="#/home">
                         <img
-                            src="./public/icon.png"
+                            src="./icon.png"
                             width="25"
                             height="25"
                             className="d-inline-block align-top"
