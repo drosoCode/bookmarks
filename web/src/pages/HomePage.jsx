@@ -1,6 +1,7 @@
 import TagSelector from "../components/TagSelector";
 import BookmarkCard from "../components/BookmarkCard";
 import BookmarkLine from "../components/BookmarkLine";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { useAPI } from "../Api";
@@ -12,9 +13,16 @@ export default function HomePage(props) {
     const [andMode, setAndMode] = useState(false);
     const [gridMode, setGridMode] = useState(true);
     const [bookmarks, setBookmarks] = useState([]);
+    const navigate = useNavigate();
     const { api } = useAPI();
 
     useEffect(() => {
+        if(window.location.search.includes("?title=")) {
+            navigate({
+                pathname: "/add",
+                search: window.location.search,
+            })
+        }
         api("tag", "GET").then((data) => {
             if (data !== null) {
                 setTags(data);
@@ -54,7 +62,7 @@ export default function HomePage(props) {
 
     return (
         <div>
-            <div className="row bg-secondary pt-3 mb-4 rounded">
+            <div className="row bg-secondary pt-3 mb-4 rounded mx-2">
                 <div className="col-md-4 col-lg-4 col-xl-3 mb-3 mb-md-0">
                     <button
                         style={{ display: "inline-block" }}
@@ -90,7 +98,7 @@ export default function HomePage(props) {
                 <div className="row card-group">
                     {displayedBookmarks.map((x) => (
                         <div
-                            className="col-xs-12 col-sm-6 col-md-6 col-lg-4 mb-3"
+                            className="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 mb-3"
                             key={x.id}
                         >
                             <BookmarkCard

@@ -18,6 +18,7 @@ export default function LoginPage(props) {
             connected: true,
             name: "Test",
             token: token.current.value,
+            clearLS: false
         };
         setUserStatus(data);
         localStorage.setItem("bookmarks", JSON.stringify(data));
@@ -30,7 +31,7 @@ export default function LoginPage(props) {
             navigate("/home");
         } else {
             const data = localStorage.getItem("bookmarks");
-            if (data !== "" && data !== undefined && data !== null) {
+            if (data !== "" && data !== undefined && data !== null && !userStatus.clearLS) {
                 // login using stored data in localStorage
                 const user = JSON.parse(data);
                 if (user !== null && user.connected) {
@@ -46,6 +47,7 @@ export default function LoginPage(props) {
                         connected: true,
                         name: d.name,
                         token: d.token,
+                        clearLS: false
                     };
                     setUserStatus(data);
                     localStorage.setItem("bookmarks", JSON.stringify(data));

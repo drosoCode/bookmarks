@@ -6,6 +6,7 @@ import { useAPI } from "../Api";
 
 export default function AddPage(props) {
     const [clear, setClear] = useState(0);
+    const [fromShare, setFromShare] = useState(false);
     const [tags, setTags] = useState([]);
     const url = useRef();
     const checkbox = useRef();
@@ -21,15 +22,26 @@ export default function AddPage(props) {
                 url.current.value = "";
                 setClear(clear + 1);
                 setTags([]);
+                if(fromShare) {
+                    window.location.replace(window.location.origin)
+                }
             }
         });
     };
 
     useEffect(() => {
+        const regex = /(https?:\/\/[^ ]*)/;
         const parsedUrl = new URL(window.location);
-        alert("Title shared: " + parsedUrl.searchParams.get("title"));
-        alert("Text shared: " + parsedUrl.searchParams.get("text"));
-        alert("URL shared: " + parsedUrl.searchParams.get("url"));
+        ["url", "text", "title"].forEach((e) => {
+            if (parsedUrl.searchParams.get(e) != null) {
+                const u = parsedUrl.searchParams.get(e).match(regex);
+                if (u != null && u[0] != "") {
+                    url.current.value = u[0];
+                    setFromShare(true);
+                    return;
+                }
+            }
+        });
     });
 
     return (

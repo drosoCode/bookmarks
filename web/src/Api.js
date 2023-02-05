@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { UserContext } from './components/UserContext';
+import { useNavigate } from "react-router-dom";
 
 export const useAPI = () => {
     const { userStatus, setUserStatus } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const dev = true;
     const basePath = dev ? "http://127.0.0.1:9000/" : "/"
@@ -30,8 +32,9 @@ export const useAPI = () => {
                             if (path !== "user/login") {
                                 userStatus.connected = false
                                 userStatus.error = false
+                                userStatus.clearLS = true
                                 setUserStatus(userStatus)
-                                window.location.replace(window.location.protocol + "//" + window.location.host)
+                                navigate("/");
                             }
                         } else {
                             error(resp.status + " - " + data.data)
