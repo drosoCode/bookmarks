@@ -21,7 +21,7 @@ export default function BNavbar() {
 
     return (
         <div className="mb-4">
-            <Navbar bg="dark" variant="dark">
+            <Navbar bg="dark" variant="dark" expand="sm">
                 <Container>
                     <Navbar.Brand href="#/home">
                         <img
@@ -34,6 +34,8 @@ export default function BNavbar() {
                         />
                         Bookmarks
                     </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <LinkContainer to="/home">
                             <Nav.Link>Home</Nav.Link>
@@ -54,6 +56,7 @@ export default function BNavbar() {
                             ""
                         )}
                     </Nav>
+                    </Navbar.Collapse>
                 </Container>
             </Navbar>
         </div>
