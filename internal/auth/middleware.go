@@ -27,7 +27,8 @@ func CheckUserMiddleware() func(next http.Handler) http.Handler {
 			}
 			// get user id from token
 			uid, err := GetUserID(token)
-			if utils.IfError(w, r, err) {
+			if err != nil {
+				utils.Error(w, r, 401, err.Error())
 				return
 			}
 			// if all ok, add token and userid to context and continue

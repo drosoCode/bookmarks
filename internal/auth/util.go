@@ -31,7 +31,7 @@ func GetToken(r *http.Request) (string, error) {
 
 	// check in the headers ex: Authorization: Bearer xxxxx
 	token = r.Header.Get("Authorization")
-	if token != "" {
+	if len(token) > 7 {
 		return token[7:], nil
 	}
 
