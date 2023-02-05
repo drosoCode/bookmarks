@@ -17,11 +17,11 @@ export default function HomePage(props) {
     const { api } = useAPI();
 
     useEffect(() => {
-        if(window.location.search.includes("?title=")) {
+        if (window.location.search.includes("?title=")) {
             navigate({
                 pathname: "/add",
                 search: window.location.search,
-            })
+            });
         }
         api("tag", "GET").then((data) => {
             if (data !== null) {
@@ -72,6 +72,8 @@ export default function HomePage(props) {
                             setAndMode(!andMode);
                         }}
                     >
+                        <i className="fa-solid fa-filter fa-sm"></i>
+                        &nbsp;
                         {andMode ? "Filter AND" : "Filter OR"}
                     </button>
                     &nbsp;
@@ -83,7 +85,17 @@ export default function HomePage(props) {
                             setGridMode(!gridMode);
                         }}
                     >
-                        {gridMode ? "Display Grid" : "Display List"}
+                        {gridMode ? (
+                            <>
+                                <i className="fa-solid fa-grip fa-sm"></i>&nbsp;
+                                Display Grid
+                            </>
+                        ) : (
+                            <>
+                                <i className="fa-solid fa-bars fa-sm"></i>&nbsp;
+                                Display List
+                            </>
+                        )}
                     </button>
                 </div>
                 <div className="col-md-8 col-lg-8 col-xl-9">

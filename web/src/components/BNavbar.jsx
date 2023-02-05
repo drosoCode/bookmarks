@@ -36,26 +36,44 @@ export default function BNavbar() {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <LinkContainer to="/home">
-                            <Nav.Link>Home</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/add">
-                            <Nav.Link>Add</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/tag">
-                            <Nav.Link>Tags</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/token">
-                            <Nav.Link>Tokens</Nav.Link>
-                        </LinkContainer>
-                        <Nav.Link href={basePath + "swagger"}>API</Nav.Link>
-                        {userStatus.connected ? (
-                            <Nav.Link onClick={logout}>Logout</Nav.Link>
-                        ) : (
-                            ""
-                        )}
-                    </Nav>
+                        <Nav className="me-auto">
+                            <LinkContainer to="/home">
+                                <Nav.Link>
+                                    <i className="fa-solid fa-home fa-sm"></i>
+                                    &nbsp; Home
+                                </Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/add">
+                                <Nav.Link>
+                                    <i className="fa-solid fa-circle-plus fa-sm"></i>
+                                    &nbsp;Add
+                                </Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/tag">
+                                <Nav.Link>
+                                    <i className="fa-solid fa-tag fa-sm"></i>
+                                    &nbsp;Tags
+                                </Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/token">
+                                <Nav.Link>
+                                    <i className="fa-solid fa-key fa-sm"></i>
+                                    &nbsp;Tokens
+                                </Nav.Link>
+                            </LinkContainer>
+                            <Nav.Link href={basePath + "swagger"}>
+                                <i className="fa-solid fa-book fa-sm"></i>
+                                &nbsp;API
+                            </Nav.Link>
+                            {userStatus.connected ? (
+                                <Nav.Link onClick={logout}>
+                                    <i class="fa-solid fa-right-from-bracket fa-sm"></i>
+                                    &nbsp;Logout
+                                </Nav.Link>
+                            ) : (
+                                ""
+                            )}
+                        </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

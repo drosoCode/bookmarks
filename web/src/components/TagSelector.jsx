@@ -61,7 +61,8 @@ export default function TagSelector(props) {
                         setShow(true);
                     }}
                 >
-                    Add Tag
+                    <i className="fa-solid fa-plus fa-sm"></i>
+                    &nbsp; Add Tag
                 </Button>
                 <Button
                     variant="danger"
@@ -70,7 +71,8 @@ export default function TagSelector(props) {
                         setSelected([]);
                     }}
                 >
-                    Clear
+                    <i className="fa-solid fa-xmark fa-sm"></i>
+                    &nbsp; Clear
                 </Button>
             </InputGroup>
 
@@ -82,7 +84,11 @@ export default function TagSelector(props) {
                 }}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Select Tags</Modal.Title>
+                    <Modal.Title>
+                        &nbsp;
+                        <i className="fa-solid fa-tag"></i>
+                        &nbsp; Select Tags
+                    </Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -116,7 +122,8 @@ export default function TagSelector(props) {
                             setShow(false);
                         }}
                     >
-                        OK
+                        <i className="fa-solid fa-check fa-sm"></i>
+                        &nbsp; OK
                     </Button>
                 </Modal.Footer>
             </Modal>

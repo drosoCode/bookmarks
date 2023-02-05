@@ -30,7 +30,8 @@ export default function BookmarkLine(props) {
                     className="btn btn-sm btn-primary my-1"
                     target="_blank"
                 >
-                    Open
+                    <i className="fa-solid fa-arrow-up-right-from-square fa-sm"></i>
+                    &nbsp; Open
                 </a>
                 &nbsp;
                 {props.save ? (
@@ -40,7 +41,8 @@ export default function BookmarkLine(props) {
                             className="btn btn-sm btn-primary my-1"
                             target="_blank"
                         >
-                            Save
+                            <i className="fa-solid fa-floppy-disk fa-sm"></i>
+                            &nbsp; Save
                         </a>
                         &nbsp;
                     </>
@@ -53,7 +55,7 @@ export default function BookmarkLine(props) {
                         props.onDelete(props.id);
                     }}
                 >
-                    Delete
+                    <i className="fa-solid fa-trash fa-sm"></i>&nbsp; Delete
                 </a>
             </td>
         </tr>

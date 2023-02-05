@@ -53,7 +53,8 @@ export default function TagPage(props) {
                     ref={tagColor}
                 />
                 <Button variant="success" onClick={addTag}>
-                    Add Tag
+                    <i className="fa-solid fa-plus fa-sm"></i>
+                    &nbsp; Add Tag
                 </Button>
             </InputGroup>
             <br />
@@ -79,7 +80,8 @@ export default function TagPage(props) {
                                         deleteTag(x.id);
                                     }}
                                 >
-                                    Delete
+                                    <i className="fa-solid fa-trash fa-sm"></i>
+                                    &nbsp; Delete
                                 </Button>
                             </td>
                         </tr>

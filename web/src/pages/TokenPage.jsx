@@ -39,7 +39,8 @@ export default function TokenPage(props) {
         <div>
             {token != null ? (
                 <Alert key="success" variant="success">
-                    Your token is: {token}
+                    <i className="fa-solid fa-key fa-sm"></i>
+                    &nbsp; Your token is: {token}
                     &nbsp;
                     <CloseButton
                         onClick={() => {
@@ -57,7 +58,8 @@ export default function TokenPage(props) {
                     className="bg-dark text-white"
                 />
                 <Button variant="success" onClick={addToken}>
-                    Add Token
+                    <i className="fa-solid fa-plus fa-sm"></i>
+                    &nbsp; Add Token
                 </Button>
             </InputGroup>
             <br />
@@ -88,7 +90,8 @@ export default function TokenPage(props) {
                                         deleteToken(x.id);
                                     }}
                                 >
-                                    Delete
+                                    <i className="fa-solid fa-trash fa-sm"></i>
+                                    &nbsp; Delete
                                 </Button>
                             </td>
                         </tr>

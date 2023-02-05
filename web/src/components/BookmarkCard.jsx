@@ -40,7 +40,8 @@ export default function BookmarkCard(props) {
                     className="btn btn-sm btn-primary"
                     target="_blank"
                 >
-                    Open
+                    <i className="fa-solid fa-arrow-up-right-from-square fa-sm"></i>
+                    &nbsp; Open
                 </a>
                 &nbsp;
                 {props.save ? (
@@ -50,7 +51,8 @@ export default function BookmarkCard(props) {
                             className="btn btn-sm btn-primary"
                             target="_blank"
                         >
-                            Save
+                            <i className="fa-solid fa-floppy-disk fa-sm"></i>
+                            &nbsp; Save
                         </a>
                         &nbsp;
                     </>
@@ -63,7 +65,7 @@ export default function BookmarkCard(props) {
                         props.onDelete(props.id);
                     }}
                 >
-                    Delete
+                    <i className="fa-solid fa-trash fa-sm"></i>&nbsp; Delete
                 </a>
             </div>
             <div className="card-footer text-muted border-secondary">

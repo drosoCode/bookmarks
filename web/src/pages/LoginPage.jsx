@@ -18,7 +18,7 @@ export default function LoginPage(props) {
             connected: true,
             name: "Test",
             token: token.current.value,
-            clearLS: false
+            clearLS: false,
         };
         setUserStatus(data);
         localStorage.setItem("bookmarks", JSON.stringify(data));
@@ -31,7 +31,12 @@ export default function LoginPage(props) {
             navigate("/home");
         } else {
             const data = localStorage.getItem("bookmarks");
-            if (data !== "" && data !== undefined && data !== null && !userStatus.clearLS) {
+            if (
+                data !== "" &&
+                data !== undefined &&
+                data !== null &&
+                !userStatus.clearLS
+            ) {
                 // login using stored data in localStorage
                 const user = JSON.parse(data);
                 if (user !== null && user.connected) {
@@ -47,7 +52,7 @@ export default function LoginPage(props) {
                         connected: true,
                         name: d.name,
                         token: d.token,
-                        clearLS: false
+                        clearLS: false,
                     };
                     setUserStatus(data);
                     localStorage.setItem("bookmarks", JSON.stringify(data));
@@ -68,7 +73,8 @@ export default function LoginPage(props) {
                     <InputGroup className="mb-3">
                         <Form.Control placeholder="Token" ref={token} />
                         <Button variant="outline-primary" onClick={loginToken}>
-                            Login with Token
+                            <i className="fa-solid fa-key fa-sm"></i>
+                            &nbsp; Login with Token
                         </Button>
                     </InputGroup>
                 </div>

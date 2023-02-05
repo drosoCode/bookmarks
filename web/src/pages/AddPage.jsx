@@ -22,8 +22,8 @@ export default function AddPage(props) {
                 url.current.value = "";
                 setClear(clear + 1);
                 setTags([]);
-                if(fromShare) {
-                    window.location.replace(window.location.origin)
+                if (fromShare) {
+                    window.location.replace(window.location.origin);
                 }
             }
         });
@@ -49,7 +49,10 @@ export default function AddPage(props) {
             <div className="card-body">
                 <Form>
                     <Form.Group className="mb-3">
-                        <Form.Label className="text-white">Link</Form.Label>
+                        <Form.Label className="text-white">
+                            <i className="fa-solid fa-link fa-sm"></i>
+                            &nbsp; Link
+                        </Form.Label>
                         <Form.Control
                             placeholder="Bookmark URL"
                             ref={url}
@@ -58,7 +61,10 @@ export default function AddPage(props) {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label className="text-white">Tags</Form.Label>
+                        <Form.Label className="text-white">
+                            <i className="fa-solid fa-tag fa-sm"></i>
+                            &nbsp; Tags
+                        </Form.Label>
                         <TagSelector
                             clear={clear}
                             onChange={(data) => {
@@ -75,7 +81,8 @@ export default function AddPage(props) {
                         />
                     </Form.Group>
                     <Button variant="primary" onClick={add}>
-                        ADD
+                        <i className="fa-solid fa-check fa-sm"></i>
+                        &nbsp; ADD
                     </Button>
                 </Form>
             </div>
