@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -17,8 +16,6 @@ import (
 func Authenticate(r *http.Request) (int64, error) {
 	source := net.ParseIP(strings.Split(r.RemoteAddr, ":")[0])
 	proxies := config.Data.TrustedSources
-	fmt.Println(source)
-	fmt.Println(proxies)
 	authorizedSource := false
 	for _, p := range proxies {
 		_, ipnet, err := net.ParseCIDR(p)
@@ -28,9 +25,8 @@ func Authenticate(r *http.Request) (int64, error) {
 		}
 	}
 
-	fmt.Printf("%+v\n", r.Header)
 	if !authorizedSource {
-		return -1, errors.New("source is not authorized to send authentication headers")
+		return -1, errors.New("source is not authorized to send authentication headers: " + source.String())
 	}
 
 	if len(config.Data.AllowedGroups) > 0 {
@@ -43,8 +39,6 @@ func Authenticate(r *http.Request) (int64, error) {
 			}
 		}
 		if !ok {
-			fmt.Println(config.Data.AllowedGroups)
-			fmt.Println(groups)
 			return -1, errors.New("unauthorized group")
 		}
 	}
