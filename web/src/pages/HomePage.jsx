@@ -17,7 +17,10 @@ export default function HomePage(props) {
     const { api } = useAPI();
 
     useEffect(() => {
-        if (window.location.search.includes("?title=")) {
+        if (
+            window.location.search.includes("?title=") ||
+            window.location.search.includes("?text=")
+        ) {
             navigate({
                 pathname: "/add",
                 search: window.location.search,
