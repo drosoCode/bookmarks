@@ -5,7 +5,7 @@ services:
         restart: unless-stopped
         environment:
             BM_USER_HEADER: Remote-User
-            BM_GROUP_HEADER: Remote-Group
+            BM_GROUP_HEADER: Remote-Groups
             BM_NAME_HEADER: Remote-Name
             BM_ALLOWED_GROUPS: bookmarks
             BM_TRUSTED_SOURCES: 0.0.0.0/0
