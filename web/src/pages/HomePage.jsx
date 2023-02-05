@@ -54,10 +54,12 @@ export default function HomePage(props) {
                 )
             );
         }
-    }, [selectedTags, andMode]);
+    }, [selectedTags, andMode, bookmarks]);
 
     const del = (id) => {
-        setBookmarks(bookmarks.filter((x) => x.id != id));
+        api("bookmark/" + id, "DELETE").then((d) => {
+            setBookmarks(bookmarks.filter((x) => x.id != id));
+        });
     };
 
     return (

@@ -67,7 +67,7 @@ export default function BNavbar() {
                             </Nav.Link>
                             {userStatus.connected ? (
                                 <Nav.Link onClick={logout}>
-                                    <i class="fa-solid fa-right-from-bracket fa-sm"></i>
+                                    <i className="fa-solid fa-right-from-bracket fa-sm"></i>
                                     &nbsp;Logout
                                 </Nav.Link>
                             ) : (
