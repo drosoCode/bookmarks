@@ -32,6 +32,7 @@ export default function BookmarkCard(props) {
                 <img
                     src={basePath + "cache/" + props.id + "/image.png"}
                     className="card-img-top"
+                    style={{ maxHeight: "200px" }}
                 />
             </a>
             <div className="card-body border-secondary">
