@@ -18,16 +18,23 @@ func Process(data BookmarkQueueData) error {
 
 	b, err := getBrowser()
 	if err != nil {
+		fmt.Println("processing error: " + err.Error())
 		return err
 	}
 	page, err := (*b).NewPage()
 	if err != nil {
+		fmt.Println("processing error: " + err.Error())
 		return err
 	}
+	defer page.Close()
 
 	saveBaseDir := path.Join(config.Data.CachePath, strconv.FormatInt(data.ID, 10))
 	saveDir := path.Join(saveBaseDir, "html")
-	os.MkdirAll(saveDir, os.ModePerm)
+	err = os.MkdirAll(saveDir, os.ModePerm)
+	if err != nil {
+		fmt.Println("processing error: " + err.Error())
+		return err
+	}
 
 	if data.Save {
 		sData = SharedData{
@@ -42,21 +49,31 @@ func Process(data BookmarkQueueData) error {
 	if _, err := page.Goto(data.Link, playwright.PageGotoOptions{
 		WaitUntil: playwright.WaitUntilStateNetworkidle,
 	}); err != nil {
+		fmt.Println("processing error: " + err.Error())
 		return err
 	}
 
-	database.DB.SetBookmarkData(context.Background(), database.SetBookmarkDataParams{
+	err = database.DB.SetBookmarkData(context.Background(), database.SetBookmarkDataParams{
 		Name:        getTitle(page),
 		Description: getDescription(page),
 		ID:          data.ID,
 	})
-	getImage(page, path.Join(saveBaseDir, "image.png"))
+	if err != nil {
+		fmt.Println("processing error: " + err.Error())
+		return err
+	}
+
+	err = getImage(page, path.Join(saveBaseDir, "image.png"))
+	if err != nil {
+		fmt.Println("processing error: " + err.Error())
+		return err
+	}
 
 	if data.Save {
 		sData.WG.Wait()
 		patchFiles()
 	}
 
-	page.Close()
+	fmt.Println("processing ok")
 	return nil
 }
