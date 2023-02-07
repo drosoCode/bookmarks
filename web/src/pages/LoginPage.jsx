@@ -41,6 +41,7 @@ export default function LoginPage(props) {
                 const user = JSON.parse(data);
                 if (user !== null && user.connected) {
                     setUserStatus(user);
+                    document.cookie = "bookmarktoken=" + user.token;
                     navigate("/home");
                     return;
                 }
