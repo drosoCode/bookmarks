@@ -42,5 +42,31 @@
             "text": "text",
             "url": "url"
         }
-    }
+    },
+    "shortcuts": [
+        {
+            "name": "New Bookmark",
+            "short_name": "New Bookmark",
+            "description": "New Bookmark",
+            "url": "/#/add",
+            "icons": [
+                {
+                    "src": "/icons/plus.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "short_name": "Tags",
+            "description": "Tags",
+            "url": "/#/tag",
+            "icons": [
+                {
+                    "src": "/icons/tag.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
 }
